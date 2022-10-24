@@ -8,7 +8,9 @@
 -   Appendices A and B: covering serialization and compression, and cloud net‐ working, respectively
 
 
-## Chapter 1
+# Section I
+
+### Chapter 1 - Data Engineering Described
 
 #### Data Maturity and the Data Engineer
 
@@ -28,10 +30,9 @@ Data Engineer should focus on:
 
 Pitfalls:
 - Not delivering on those small wins will have people wondering why you're there in the first place. Talking to everyone in the company all the time is how you figure out what these small wins are. Don't be in a situation we're higher ups would rather have an extra software engineer rather than a pure data engineer.
-- 
 - delivering small wins fast generally comes at the price of solid architecture, **have a plan to (reduce/transition out of) this tech debt you will incur**. 
 
-	<mark class='green'>My personal thoughts on this are that since businesses change so quickly the best initial architecture is one that is decoupled or easy to decouple. Data is there to serve a business objective. A lot of these Data "thought leaders" aren't talking about this. I feel it's more important to architect for a smooth change in context than it is to try to anticipate what that change is going to be and then architect for that. </mark>
+<mark class='green'>My personal thoughts on this are that since businesses change so quickly the best initial architecture is one that is decoupled or easy to decouple. Data is there to serve a business objective. A lot of these Data "thought leaders" aren't talking about this. I feel it's more important to architect for a smooth change in context than it is to try to anticipate what that change is going to be and then architect for that. </mark>
 #reversable #decoupling 
 
 - Never 're-invent the wheel' at this stage. Use frameworks to do all the heavy lifting, this will help speed, however be mindful of the tech debt point above. 
@@ -49,7 +50,7 @@ When the data scaling happens hopefully there has been the solid bedrock develop
 
 Pitfalls to avoid:
 -  now that data has proven its worth it is tempting to over-index on it and adopt bleeding edge technologies. Do not do this. Technology  decisions should be driven by value.
-- Don't get bogged down by the volum. Focus on managing team's throughput through simple solutions and easy deployment.
+- Don't get bogged down by the volume. Focus on managing team's throughput through simple solutions and easy deployment.
 - given success in stage 1, your status will have risen in the organization, **avoid complacency**. Use newfound trust to demand further insight from teams across organization. Teach teams basics of data fluency to get smarter input from them for future work/ data products. Build good I/O between you and the rest of the organization.
 
 ##### Stage 3 Leading with data
@@ -71,9 +72,9 @@ Then for the rest of the chapter is then a section about the different data role
 And also how DEs relate to product managers, project managers, C-suit, etc. Nothing too interesting. But interesting for career moves down the line. Refer back later.
 
 
-## Chapter 2
+### Chapter 2 - The Data Engineering Lifecycle
 
-#### The Data Engineering Lifecycles
+#### Overview
 
 Here we briefly look at what the author calls the data engineering lifecycle. It is not an 'idée fixe' of how things should look however it divides up areas of work within the pipeline in a somewhat useful way, and we look at the questions that are key to answering in each area.
 
@@ -206,7 +207,7 @@ Knowledge of user and identity access management (IAM) roles, policies, groups, 
 
 ##### Data Management
 
-While non-technical, this section actually seems really important. It's about the human component of data where we have a clean process to get everyone involved (**we saw how important this is in early stages of maturity!!!**) 
+While non-technical, this section actually seems really important. It's about the human component of data where we have *a clean process to get everyone involved* (**we saw how important this is in early stages of maturity!!!**) 
 - Do we have good docs on our datamarts, Eg. If marketing asks questions about customers - how do we define a customer? Do we have tools to generate good docs for us automatically? (ex: DBT `docs` function)
 - Way way more stuff .....
 
@@ -217,7 +218,7 @@ While non-technical, this section actually seems really important. It's about th
 
 ##### Data Ops
 
-DataOps is a collection of technical practices, workflows, cultural norms, and architec‐ tural patterns that enable:
+DataOps is a collection of technical practices, workflows, cultural norms, and architectural patterns that enable:
 -   Rapid innovation and experimentation delivering new insights to customers with increasing velocity
 -   Extremely high data quality and very low error rates
 -   Collaboration across complex arrays of people, technology, and environments
@@ -262,13 +263,15 @@ See chapter 3
 "Ya like dags?" - Mickey
 
 We must point out that orchestration is strictly a batch concept. The streaming alternative to orchestrated task DAGs is the streaming DAG. Streaming DAGs remain challenging to build and maintain.
+Orchestration is the price of decoupling. see later notes
+
 See Chapter 8.
 
 ##### Software Engineering
 
 Programming: You better know SQL son.
 
-Core software engineering skills: they are pretty important, as are core software engineering best practices such as code-testing methodologies, such as unit, regression, integration, end-to-end, and smoke. It is important to have a fundamental understanding of how good software is built, the purpose it fulfills, keeping not just low level code but entire codebases / organizations adherent to DRY, KISSES etc .... Don't try to reinvent the wheel unless you work for Ferrari. I will probably keep saying versions of this throughout the whole notes. **This wheel habit is  something I personally struggle with a lot, on all levels of my engineering skills and in life in general.**  
+Core software engineering skills: they are pretty important, as are core software engineering best practices such as code-testing methodologies, such as unit, regression, integration, end-to-end, and smoke. It is important to have a fundamental understanding of how good software is built, the purpose it fulfills, keeping not just low level code but entire codebases / organizations adherent to DRY, KISSES etc .... Don't try to reinvent the wheel unless you work for Ferrari. I will probably keep saying versions of this throughout the whole notes. 
 
 
 Keeping track of what open source is doing is important. As noted earlier, coding custom solutions has its own special situation that should only be undertaken for clearly identified use cases. 
@@ -281,14 +284,14 @@ Streaming data processing is inherently more complicated than batch, and the too
 For instance, data processing tasks such as joins that we take for granted in the batch processing world often become more complicated in real time, requiring more complex software engineering. Engineers must also write code to apply a variety of windowing methods. Windowing allows real-time systems to calculate valuable metrics such as trailing statistics. Engineers have many frameworks to choose from, including various function platforms (OpenFaaS, AWS Lambda, Google Cloud Func‐ tions) for handling individual events or dedicated stream processors (Spark, Beam, Flink, or Pulsar) for analyzing streams to support reporting and real-time actions. 
 ```
 
-IaC: EMR is good, Databricks is better. Terraform is good. (Does Docker fall in here?)
+IaC: Terraform is good. (Does Docker fall in here?)
 
 ---
 
 Summary: the final word is that data engineering envelops and is enveloped by other fields, each with their own skillsets and best practices that are important to know.
 
 
-## Chapter 3
+### Chapter 3 - Designing Good Data Architecture
 
 #### Overview
 
@@ -404,6 +407,7 @@ This is the classic. Advances have been the introduction of MPP (massive parrall
 Data source > Staging area > ETL process > Warehouse > Datamarts
 
 Currently the data warehouse is seeing very important developments to the extent that it may require a new name altogether.
+Data warehouses tend towards monolithic properties, as do data warehouse solutions like dbt. But we've personally seen how nice this is sometimes.
 
 ##### The Data Lake
 
@@ -499,17 +503,17 @@ Data architectures have countless other variations, such as data fabric, data hu
 -----
 
 <mark class='green'>
-I think deeper understanding of Section II and, more importantly, experiece trying to design systems will be helpful before referring back to this chapter. I also think the 'further readings' section at the end of this chapter would be helpful, but I'd really like to get to Section II</mark>
+I think deeper understanding of Section II and, more importantly, experience trying to design systems will be helpful before referring back to this chapter. I also think the 'further readings' section at the end of this chapter would be helpful, but I'd really like to get to Section II</mark>
 #referback 
 
 
 
-## Chapter 4
+### Chapter 4 - Choosing Technologies Across the Data Engineering Lifecycle
 
 The author talks about how to decide which *Tools* to adopt.
 Distinction: *Architecture* is the 'what, why, and when' whilst *Tools* are the 'how'.
 
-Reasons for picking the **wrong** architecture:
+Reasons for picking the **wrong** tools:
 - shiny object syndrome (me haz snoflaek, wbu?)
 - RDD (resume-driven development, I thought this was funny)
 
@@ -550,7 +554,7 @@ Basic advice, I liked how he talked about technologies becoming obsolete and ven
 The author links a hilarious video entitled **Silicon Valley - Making the World a Better Place**
 
 Examples
-*Immutable*: SQL, bash, Object Storage (for ex: S3, x86,  C)
+*Immutable*: SQL, python, bash, Object Storage (for ex: S3, x86,  C)
 *Transitory*: js frameworks, Hive
 
 Mass Adoption != Immutable. Ex: Hive allowed analysts and engineers to query massive datasets without coding massive MapReduce jobs, however despite its explosion in adoption it has been quickly  abandoned for better tools that have been built since.
@@ -569,6 +573,7 @@ The author talks about the benefits of cloud, managed services etc.. these seem 
 
 >[!Warning]
 >Using the cloud means *adopting cloud practices*. If you use the same architecture in the cloud as you do on-prem or co-lo this is an anti-pattern and will incure large costs! (bad dev experience, high financial costs, fighting with the cloud provider, etc..)
+
 
 
 ###### Cloud Economics
@@ -810,7 +815,9 @@ Note also that clouds offer their own managed open source products. If a cloud v
 ##### The Monolith Pattern
 Interesting point that **the price of modular is having to add/manage yet another service - orchestration**.
 
-##### The Distributed Monolith Pattern
+
+<mark class= 'red'> we're going to just skip the rest of this chapter. I feel that it is sort of a re hashing of what has been said before but knowledge of section 2 will make it perhaps more interesting on a second read? </mark>
+
 <mark class='orange'>refer back when we know more</mark>
 #referback
 
@@ -818,6 +825,796 @@ Interesting point that **the price of modular is having to add/manage yet anothe
 
 
 
+# Section II
+
+### Chapter 5 - Data Generation in Source Systems
+
+#### Source Systems: Main Ideas
+
+
+A file is a sequence of bytes, typically stored on a disk. Files store everything.
+
+###### ACID
+atomicity, consistency, isolation, durability
+
+###### OLTP vs OLAP
+- In contrast to an OLTP system, an online analytical processing (OLAP) system is built to run large analytics queries and **is typically inefficient at handling lookups of individual records.**
+
+###### CDC
+CDC (Change data capture) is a method for extracting each change event (insert, update, delete) that occurs in a database. CDC is frequently leveraged to replicate between databases in near real time or create an event stream for downstream processing. Relational data‐ bases often generate an event log stored directly on the database server that can be processed to create a stream
+#logs 
+
+###### Logs
+Logs are a huge source of data. We saw in our programming experience that there are different types of log levels. In data engineernig we can leverage that.  The log level refers to the conditions required to record a log entry, specifically concerning errors and debugging. Software is often configurable to log every event or to log only errors, for example.
+Database logs are extremely useful in data engineering, especially for CDC to generate event streams from database changes.
+#logs
+
+
+###### Insert-Only
+The insert-only pattern retains history directly in a table containing data. Rather than updating records, new records get inserted with a timestamp indicating when they were created (Table 5-1). For example, suppose you have a table of customer addresses. Following a CRUD pattern, you would simply update the record if the customer changed their address. With the insert-only pattern, a new address record is inserted with the same customer ID. To read the current customer address by customer ID, you would look up the latest record under that ID.
+
+###### Messages Queues vs Streams
+
+Messages are discrete and singular signals in an event-driven system. For example, an IoT device might send a message with the latest temperature reading to a message queue. This message is then ingested by a service that determines whether the furnace should be turned on or off. This service sends a message to a furnace controller that takes the appropriate action. Once the message is received, and the action is taken, the message is removed from the message queue.
+**So I guess the difference is that Message Queues are stateful?**
+
+Streams are append only logs.
+As events occur, they are accumulated in an ordered sequence, a timestamp or an ID might order events. (Note that events aren’t always delivered in exact order because of the subtleties of distributed systems.)
+
+Systems that deal with this sort of data usually do both. (Deal with a message queue and create a stream out of it, etc..)
+
+###### Types of Time
+
+*Event time* indicates when an event is generated in a source system, including the timestamp of the original *event* itself. An undetermined time lag will occur upon *event* *creation*, before the event is *ingested* and *processed* downstream. **Always include timestamps for each phase through which an event travels**. **Log events as they occur and at each stage of time—when they’re created, ingested, and processed. Use these timestamp logs to accurately track the movement of your data through your data pipelines.**
+
+In short: if you're logging shit all over the place you're not crazy - its a best practice and data friendly.
+
+
+#### Source System Practical Details
+
+##### Databases
+
+There's a lot of different types of databases. Generally the dichotomy is made over sql vs nosql however there are many more non-relational databases than relational ones. SQL however is just so ubiquitous that it gets its own slot.
+
+Properties of databases:
+- Lookups: how are lookups done? What are the implications? (in SQL it's useful to know the basics about the different types of indexes)
+- Query Optimization: is there a query optimizer? how does it work? (knowing the basics helps you work *with it* rather than **against it**)
+- Scale: does the db scale? horizontal (more database nodes) or vertical (more compute on a single machine) ?
+- Modeling patterns: how do you model your data to take advantage of this database? normalization or OBT (one big table)? see chapter 8
+- CRUD: how are CRUD operations performed? each database does things a little differently
+- Consistency: Is the database fully consistent, or does it support a relaxed consistency model (e.g., eventual consistency)?
+
+###### Relational
+
+SQL is good
+
+###### Non - Relational
+
+We list some main examples below:
+
+
+---
+
+Key-value stores:
+- Examples: AWS DynamoDB
+
+---
+
+
+Document stores. (like nested key value stores?)
+- Examples: MongoDB, AWS DynamoDB and Azure CosmosDB
+- indexes possible
+- joins not supported
+- Generally not-ACID compliant (see specs of individual db)
+
+---
+
+
+Wide-column Databases:
+- Examples: Apache Cassandra, ScyllaDB, Apache HBase, Google BigTable, and Azure Cosmos DB
+-  Optimized for storing massive amounts of data with high transaction rates and extremely low latency
+- support petabytes of data, millions of requests per second and sub 10ms latency
+		- popular in ecommerce, fintech, ad tech, IoT, and real-time personalization applications
+-  support rapid scans of massive amounts of data but do not support complex queries
+		- only a single index (the row key) for lookups.
+- analysis of the specs of the Wide Column Database is required to set up a
+		- suitable configuration
+		- design the schema
+		- choose an appropriate row key to optimize performance
+		- avoid common operational issues.
+	- Generally you are forced to extract data and send it to a secondary analytics system to run complex queries to deal with these limitations.
+			- This can be accomplished by running large scans for the extraction or employing CDC to capture an event stream.
+
+---
+
+Graph databases.
+- good fit when you want to analyze the connectivity between elements
+
+Introduced are unique challenges for data engineers who may be more accustomed to dealing with structured relations, documents, or unstructured data. Engineers must choose whether to do the following:
+-   Map source system graph data into one of their existing preferred paradigms   
+-   Analyze graph data within the source system itself
+-   Adopt graph-specific analytics tools
+
+---
+
+Search Databases
+
+*Text search* involves searching a body of text for keywords or phrases, matching on exact, fuzzy, or semantically similar matches.
+*Log analysis* is typically used for anomaly detection, real-time monitoring, security analytics, and operational analytics. 
+
+Queries can be optimized and sped up with the use of indexes.
+
+---
+Time Series Database
+
+The schema for a time series typically contains a timestamp and a small set of fields. Because the data is time-dependent, the data is ordered by the timestamp. This makes time-series databases suitable for operational analytics but not great for BI use cases. Joins are not common, though some quasi time-series databases such as Apache Druid support joins. Many time-series databases are available, both as open source and paid options.
+
+
+
+##### APIs
+
+Standard stuff: REST, GraphQL
+
+###### Webhooks
+
+Webhooks are a simple event-based data-transmission pattern. The data source can be an application backend, a web page, or a mobile app. When specified events happen in the source system, this triggers a call to an HTTP endpoint hosted by the data consumer. Notice that the connection goes from the source system to the data sink, the opposite of typical APIs. For this reason, webhooks are often called reverse APIs.
+
+The endpoint can do various things with the POST event data, potentially triggering a downstream process or storing the data for future use. For analytics purposes, we’re interested in collecting these events. Engineers commonly use message queues to ingest data at high velocity and volume. We will talk about message queues and event streams later in this chapter.
+
+#### Third-Party Data Sources
+
+Direct third-party data access is commonly done via APIs, through data sharing on a cloud platform, or through data download. APIs often provide deep integration capabilities, allowing customers to pull and push data. For example, many CRMs offer APIs that their users can integrate into their systems and applications. We see a common workflow to get data from a CRM, blend the CRM data through the customer scoring model, and then use reverse ETL to send that data back into CRM for salespeople to contact better-qualified leads.
+
+##### Message Queues and Event-Streaming Platforms
+
+Event-driven architectures are pervasive in software applications and are poised to grow their popularity even further. First, message queues and event-streaming plat‐ forms—critical layers in event-driven architectures—are easier to set up and manage in a cloud environment. Second, the rise of data apps—applications that directly integrate real-time analytics—are growing from strength to strength. Event-driven architectures are ideal in this setting because events can both trigger work in the application and feed near real-time analytics.
+
+###### Message Queues
+
+A message queue is a mechanism to asynchronously send data (usually as small individual messages, in the kilobytes) between discrete systems using *a publish and subscribe model*. Data is published to a message queue and is delivered to one or more subscribers. The subscriber acknowledges receipt of the message, removing it from the queue. **Message queues allow applications and systems to be decoupled from each other.**
+#decoupling #architecture 
+
+
+**There are many different types of message queues.** Important properties that define these different types are *frequency of* *delivery*, *message* *ordering* and *scalability.*
+
+*Message Ordering*:
+Order matters. Message queues don't necessarily follow the FIFO of a basic queue when dealing with a large distributed system. 
+- Is this ambiguity a problem?
+- What are your solutions to it, if it matters? 
+- One hardcore solution is simply to ask your cloud provider to enforce FIFO (AWS SQS has an option for this), however are you prepared to accept the throttling that this will incur? #bottleneck 
+
+*Delivery frequency*:
+Sometimes a single message might be sent twice. Is this going to screw up your system? Idempotency here will be important!
+#idempotent
+
+*Scalability*:
+Message queues are generally great at scaling up and down horizontally (add more nodes) however *message ordering* characteristics may change due to this. Ask yourself:
+- what are the consequences of massive parallel scaling, should it happen?
+#scaledown #scaleup
+
+
+
+###### Event-Streaming Platforms
+
+The big difference between messages and streams is that a message queue is primarily used to route messages with certain delivery guarantees. In contrast, an event-streaming platform is used to ingest and process data in an ordered log of records.
+When evaluating which event-streaming platform to use we look at 3 key characteristics: *topics*, *stream partitions* and *fault tolerance and resilience*. 
+
+*Topics*
+A *producer* **streams** *event*s to a *topic*, **a collection of related events.**  A *topic* can have zero, one, or multiple *producer*s. Then, *subscribers* to the topic are sent the *event*.
+
+*Stream Partitions*
+The **streams** mentioned above can be parallelized, like a highway, into stream partitions. You can apply a function to an event to assign it a *partition key*. Events with the same *partition key* will end up in the same partition. Improper setting of *partition keys* means that certain partitions will bottleneck. Example: You are streaming the messages from an app and you apply a function to partition messages by state. Your partitions that take care of NY, CA etc.. will be far more loaded than ones for MO, KY.
+
+*Fault Tolerance and Resilience*
+Event-streaming platforms are typically distributed systems, with streams stored on various nodes. If a node goes down, another node replaces it, and the stream is still accessible. This means records aren’t lost; you may choose to delete records, but that’s another story. This fault tolerance and resilience make streaming platforms a good choice when you need a system that can reliably produce, store, and ingest event data.
+
+##### Data Contracts
+
+James Denmore (Data Pipelines Pocket Reference Book):
+```
+A data contract is a written agreement between the owner of a source system and the team ingesting data from that system for use in a data pipeline. The contract should state what data is being extracted, via what method (full, incremental), how often, as well as who (person, team) are the contacts for both the source system and the ingestion. Data contracts should be stored in a well-known and easy-to-find location such as a GitHub repo or internal documentation site. If possible, format data contracts in a standardized form so they can be integrated into the development process or queried programmatically
+```
+
+
+Since a lot of this stuff may happen upstream from you, written by a software engineer (or potenetially a large team of  engineers) sometimes people adopt SLAs (Service Level Agreements) or Data Contracts. The idea being that you ask certain guarantees from them, and you can build your system adapted to the guarantees they are willing to give you. 
+
+
+
+
+### Chapter 6 - Storage
+
+
+#### Raw Ingredients of Data Storage
+
+In most data architectures, data frequently passes through magnetic storage, SSDs, and memory as it works its way through the various processing phases of a data pipeline. Data storage and query systems generally follow complex recipes involving distributed systems, numerous services, and multiple hardware storage layers. These systems require the right raw ingredients to function correctly.
+
+##### Magnetic Disk Drive (HDD)
+
+Slower than SSD but very important to remember that they still form the backbone of bulk data storage systems because they are significantly cheaper than SSDs per gigabyte of stored data. 
+
+Important  Properties:
+-  Disk capacity scales with areal density (gigabits stored per square inch)
+-  transfer speed scales with linear density (bits per inch)
+
+With these  two facts we can see that increasing the size/disk capacity will not scale proportionately with the amount of data you can I/O from the disk.
+#bottleneck 
+
+Note:
+- current data center drives support maximum data transfer speeds of 200–300 MB/s
+- This means that a 30TB disk will take maybe 30 hours to be read in its entirety.
+
+
+
+Further notes:
+```
+A second major limitation is seek time. To access data, the drive must physically relocate the read/write heads to the appropriate track on the disk.
+
+Third, in order to find a particular piece of data on the disk, the disk controller must wait for that data to rotate under the read/write heads. This leads to rotational latency. Typical commercial drives spinning at 7,200 revolutions per minute (RPM) seek time, and rotational latency, leads to over four milliseconds of overall average latency (time to access a selected piece of data).
+
+A fourth limitation is input/output operations per second (IOPS), critical for transactional databases. A magnetic drive ranges from 50 to 500 IOPS.
+
+
+
+```
+
+>[!HINT] IOPS is the number of operations possible per second, regardless of the size of those operations
+
+###### Cloud Object Storage
+
+As one might guess from the equation above, at some point it becomes more efficient to parralelize HDDs and distribute the data among them. **Cloud Object Storage is mostly parallelized HDDs!**
+As a consequence of this solution, a new #bottleneck  arises: network throughput and CPU.
+
+
+
+##### Solid State Drive (SSD)
+
+SSDs can scale:
+- data-transfer speeds with storage size
+- IOPs with storage size. 
+
+They are the accepted standard for commercial deployments of OLTP systems. SSDs allow relational databases such as PostgreSQL, MySQL, and SQL Server to handle thousands of transactions per second.
+
+Due to costs however they are not primarily used for OLAP, nor for object storage. However **some** OLAP databases leverage SSD caching to support high-performance queries on frequently accessed data. As low-latency OLAP becomes more popular, we expect SSD usage in these systems to follow suit.
+
+##### RAM
+
+
+Ram offers *significantly higher* transfer speeds and faster retrieval times than SSD storage. DDR5 memory—the latest widely used standard for RAM—offers data retrieval latency on the order of 100 ns, roughly 1,000 times faster than SSD. A typical CPU can support 100 GB/s bandwidth to attached memory and millions of IOPS. (Statistics vary dramatically depending on the number of memory channels and other configuration details.)
+
+Several databases treat RAM as a primary storage layer, allowing ultra-fast read and write performance. In these applications, data engineers must always keep in mind the volatility of RAM. Even if data stored in memory is replicated across a cluster, a power outage that brings down several nodes could cause data loss. Architectures intended to durably store data may use battery backups and automatically dump all data to disk in the event of power loss.
+
+##### Networking and CPU
+
+
+As we began to talk about in the HDD section, parallelization of storage (and duplication/redundancy of data for safety/integrity purposes across more than one drive) creates an architecture where Networking becomes important.
+
+Furthermore this parallelization makes CPU another factor as it has to take care of orchestrating this distribution:
+
+```
+CPUs handle the details of servicing requests, aggregating reads, and distributing writes. Storage becomes a web application with an API, backend service components, and load balancing. Network device performance and network topology are key factors in realizing high performance.
+```
+
+**See Appendix B for Cloud Networking**
+
+
+##### Serialization
+
+Data stored in system memory by software is generally not in a format suitable for storage on disk or transmission over a network. *Serialization* is the process of flattening and packing data into a standard format that a reader will be able to decode. Serialization formats provide a standard of data exchange.
+
+Further Study:
+- apache parquet (widely used)
+- apache hudi (hybrid serialization)
+- apache arrow (in-memory serialization)
+
+Low-level database storage is also a form of serialization. Row-oriented relational databases organize data as rows on disk to support speedy lookups and in-place updates. Columnar databases organize data into column files to optimize for highly efficient compression and support fast scans of large data volumes. Each serialization choice comes with a set of trade-offs, and data engineers tune these choices to optimize performance to requirements.
+
+**See Appendix A**
+
+##### Compression
+
+Compression is the process of making data smaller.
+
+Advantages:
+- Reduced Storage space (=> reduced storage cost)
+- Reduce Scan Time (10:1 compression => 1/10 of time to scan data)
+- Reduced Network latency (10:1 compression => 10x network speed when sending data from one place to another)
+#bottleneck 
+
+Disadvantages:
+- need to compress/decompress, need a plan for how to do this without creating further bottlenecks elsewhere.
+
+**See Appendix A**
+
+*Summary Table*
+![[Screen Shot 2022-10-21 at 4.28.11 PM 1.png]]
+
+#### Data Storage Systems 
+
+Storage systems exist at a level of abstraction above raw ingredients. For example, magnetic disks are a raw storage ingredient, while major cloud object storage platforms and HDFS are storage systems that utilize magnetic disks.
+
+##### Single Machine Versus Distributed Storage
+
+Single Machine storage => big EC2 machine
+Distributed Storage => cloud data warehouses, spark, S3
+
+##### Eventual Versus Strong Consistency
+
+Strong consistency => ACID
+
+*Eventual Consistency* is what happens when you end up with a large scale distributed system (basically - parallelized across many machines):
+- Consistency is not guaranteed, but database reads and writes are made on a best-effort basis, meaning consistent data is available most of the time.
+- The state of the transaction is fuzzy, and it’s uncertain whether the transaction is committed or uncommitted.
+- At some point, reading data will return consistent values
+
+**Eventual consistency** allows you to retrieve data quickly without verifying that you have the latest version across all nodes.
+**Strong consistency** - the distributed database ensures that writes to any node are first distributed with a consensus and that any reads against the database return consistent values. 
+
+You’ll use strong consistency when you can tolerate higher query latency and require correct data every time you read from the database.
+
+In real life the choice of consistency occurs at 3 levels:
+1. The choice of database technology (warehouse, hdfs, spark .....)
+2. If an eventual consistency storage is picked - it might have a possibility to be configured further on these consistency guarantees
+3. Finally, some database technologies support customization at the *query level* for the consistency guarantees
+
+
+
+
+##### File Storage
+
+The notion of a *file* is somewhat subtle.
+
+>[!Definition] A file is a data entity with specific read, write, and reference characteristics used by software and operating systems.
+
+Properties of a file:
+- A file is a finite-length stream of bytes
+- Bytes can be appended to the file up to the limits of the host storage system
+- Any location in the file can be read/updated.
+
+Talks about how your unix file system works, as an example.(It's just a bunch of pointers  and metadata)
+
+Says  this:
+```
+Even if you must process files on a server with an attached disk, use object storage for intermediate storage between processing steps. Try to reserve manual, low-level file processing for one-time ingestion steps or the exploratory stages of pipeline development.
+```
+
+
+###### Local Disk Storage
+
+This is the file system you know, the one managed by an OS. 
+
+`ext4` is the file system that ships with linux.
+
+
+Properties:
+- Writes data for easy recovery in the case of a power loss, however unwritten data is lost
+- full read after write consistency; reading immedi‐ ately after a write will return the written data.
+- sometimes there are locking mechanisms placed on files that are being written to #bottleneck 
+
+Some may support advanced features such as:
+	- journaling
+	- snap‐ shots
+	- redundancy
+	- the extension of the filesystem across multiple disks
+	- full disk encryption
+	- compression
+
+###### Network Attached Storage (NAS)
+
+Network-attached storage (NAS) systems provide a file storage system to clients over a network. 
+Considerations:
+- what consistency model does the NAS system use
+
+###### Cloud filesystem services (Cloud NAS)
+Clouds provide **managed NAS** solutions. *Amazon Elastic File System* *(EFS)* is an example of this. It uses the NFS 4 protocol.
+
+
+
+##### Block Storage
+
+```
+Fundamentally, block storage is the type of raw storage provided by SSDs and mag‐ netic disks. In the cloud, virtualized block storage is the standard for VMs. These block storage abstractions allow fine control of storage size, scalability, and data durability beyond that offered by raw disks.
+```
+
+Transactional database systems generally access disks at a block level to lay out data for optimal performance.
+
+Author talks about RAID
+
+```
+RAID stands for redundant array of independent disks.
+RAID simultaneously controls multiple disks to improve data durability, enhance perfor‐ mance, and combine capacity from multiple drives.
+An array can appear to the operating system as a single block device. Many encoding and parity schemes are available, depending on the desired balance between enhanced effective bandwidth and higher fault tolerance (tolerance for many disk failures).
+```
+
+
+###### Storage Area Network (SAN)
+
+Storage area network (SAN) systems provide virtualized block storage devices over a network, typically from a storage pool. SAN abstraction can allow fine-grained storage scaling and enhance performance, availability, and durability.
+Summary: this is some on-prem optimization stuf.
+
+###### Cloud Virtualized Block Storage (Cloud SAN)
+
+**This is AWS EBS** (below equivalent for other clouds probably)
+
+- EBS performance metrics are given in IOPS and throughput
+- EBS storage is suitable for applications such as databases, where data durability is a high priority.
+- EBS replicates all data to at least two separate host machines, protecting data if a disk fails
+- EBS volumes are also highly scalable. At the time of this writing, some EBS volume classes can scale up to 64 TiB, 256,000 IOPS, and 4,000 MiB/s.
+- Snapshots of EBS Volumes are stored in S3 and snapshots after the initial full backup are *differential* => only changed blocks are written to S3 to minimize storage costs and backup time. (probably uses similar technology as Docker)
+
+###### Local Instance Volumes
+
+This is the file storage on your EC2 machine. It is cheap, it provides very high IOPS, however if the machine is shut down (intentionally or not) the data is gone. There are none of the services running in the background like EBS that back up your data. 
+
+
+If you are using AWS EMR on top of EC2 machines you would be using the local instance storage. 
+#awsemr Author gives an example:
+
+```
+Despite these limitations, locally attached disks are extremely useful. In many cases, we use disks as a local cache and hence don’t need all the advanced virtualization features of a service like EBS. For example, suppose we’re running AWS EMR on EC2 instances. We may be running an ephemeral job that consumes data from S3, stores it temporarily in the distributed filesystem running across the instances, processes the data, and writes the results back to S3. The EMR filesystem builds in replication and redundancy and is serving as a cache rather than permanent storage. The EC2 instance store is a perfectly suitable solution in this case and can enhance performance since data can be read and processed locally without flowing over a network
+```
+
+
+![[Screen Shot 2022-10-22 at 4.40.56 PM.png]]
+
+
+Summary:
+- local storage is good if outages are not a problem as it is fast and cheap
+	--> you can always plan a backup to S3
+
+
+
+
+##### Object Storage (big section)
+
+###### Overview
+
+Definition: An object store is a key-value store for *immutable* data objects.
+
+In this context an **Object** is a specialized file-like construct. It could be any type of file—TXT, CSV, JSON, images, videos, or audio.
+Examples - AWS S3, Azure Blob Storage, Google Cloud Storage (GCS)
+
+In addition, many cloud data warehouses (and a growing number of databases) utilize object storage as their storage layer, and cloud data lakes generally sit on object stores.
+
+Properties:
+- immutable
+	=> no need to support locks
+	=> no need to support synchronization
+- redundancy (backed up across several AZ)
+- extremely performant parallel stream writes and reads across many disks
+	=> managed on behalf of the engineers - you only need to deal with the data stream rather than communicating with the distributed disks 
+
+Caveats:
+- Not good for handling large volumes of atomic/small updates => block storage and transactional databases much more suited for this
+
+
+###### Object stores for data engineering applications
+
+Cloud object storage is decoupled compute and storage, allowing engineers to process data with ephemeral clusters and scale these clusters up and down on demand. **This is a key factor in making big data available to smaller organizations**
+#finops #decoupling #scaleup #scaledown 
+
+**From AWS docs:**
+You can send [3,500 PUT/COPY/POST/DELETE or 5,500 GET/HEAD requests](https://docs.aws.amazon.com/AmazonS3/latest/dev/optimizing-performance.html) per second per prefix in an Amazon S3 bucket. There are no limits to the number of prefixes that you can have in your bucket.
+
+Object storage can house any binary data with no constraints on type or structure and frequently plays a role in ML pipelines for raw text, images, video, and audio.
+
+
+###### Object Consistency and Object Versioning
+
+Up until recently S3 was eventually consistent. 
+
+**Now** **S3 is *strongly consistent*** (also called *read after write*) - not just on *read* but on *list*  (*list after write*). 
+
+---
+Before, some architectures placed a strongly consistent layer (eg: a PostGres db) on top of the object storage to get strong consistency from their object layer. (eg. when you write an object, write it's key to the database and a timestamp or hash of a timestamp) 
+The price, of course, was added latency.
+
+Many companies seemed to have built their own version of this (eg. Netflix with DynamoDB as the consistency layer) and then open sourced it. 
+
+[Deep Dive on S3 Consistency and its history](https://www.allthingsdistributed.com/2021/04/s3-strong-consistency.html)
+
+---
+
+###### Storage classes and tiers
+
+Basically see [[FoDE#Cloud Economics]] for details on this. There's different cost levels of Object Storage that vary with your network use associated with them.
+
+###### Object store–backed filesystems
+
+You can mount an s3 bucket  as local storage to a machine, effectively getting SMB/NFS-like access to it from a machine (say EC2)
+
+Author: 
+Mounting object storage as a local filesystem works well for files that are updated infrequently.
+
+example service: AWS amazon s3 file gateway
+
+#referback <mark class='red'>refer back as needed</mark>
+
+
+
+###### Conclusion 
+<mark class='green'>AWS S3 was a lot more complicated that we thought it was.</mark>
+
+
+##### Cache and Memory-Based Storage Systems
+
+- remember: power outages of even a second erase data stored in RAM.
+
+- These ultra-fast cache systems are useful when data engineers need to serve data with ultra-fast retrieval latency.
+
+The author gives two examples:
+**Memcached:**
+```
+Memcached is a key-value store designed for caching database query results, API call responses, and more. Memcached uses simple data structures, supporting either string or integer types. Memcached can deliver results with very low latency while also taking the load off backend systems.
+```
+
+**Redis**:
+```
+Like Memcached, Redis is a key-value store, but it supports somewhat more com‐ plex data types (such as lists or sets). Redis also builds in multiple persistence mechanisms, including snapshotting and journaling. With a typical configuration, Redis writes data roughly every two seconds. Redis is thus suitable for extremely high-performance applications but can tolerate a small amount of data loss.
+```
+
+##### The Hadoop Distributed File System (HDFS)
+
+Hadoop is similar to object storage but with a key difference: Hadoop combines compute and storage on the same nodes, where object stores typically have limited support for internal processing.
+
+
+- The filesystem is managed by the NameNode, which maintains directories, file metadata, and a detailed catalog describing the location of file blocks in the cluster.
+- The data is broken down into *blocks* of data less than a few hundred MB in size.
+
+- In a typical configuration, each block of data is replicated to three nodes. This increases both the durability and availability of data. If a disk or node fails, the replication factor for some file blocks will fall below 3. The NameNode will instruct other nodes to replicate these file blocks so that they again reach the correct replication factor. Thus, the probability of losing data is very low, barring a *correlated failure* (e.g., an asteroid hitting the data center).
+
+- Hadoop is not simply a storage system. Hadoop combines compute resources with storage nodes to allow in-place data processing
+
+- HDFS is a key ingredient of many current big data engines, such as Amazon EMR. In fact, Apache Spark is still commonly run on HDFS clusters.
+
+##### Streaming Storage
+
+```
+Streaming data has different storage requirements than nonstreaming data. In the case of message queues, stored data is temporal and expected to disappear after a certain duration. However, distributed, scalable streaming frameworks like Apache Kafka now allow extremely long-duration streaming data retention. Kafka supports indefinite data retention by pushing old, infrequently accessed messages down to object storage. Kafka competitors (including Amazon Kinesis, Apache Pulsar, and Google Cloud Pub/Sub) also support long data retention.
+
+Closely related to data retention in these systems is the notion of replay. Replay allows a streaming system to return a range of historical stored data. Replay is the standard data-retrieval mechanism for streaming storage systems. Replay can be used to run batch queries over a time range or to reprocess data in a streaming pipeline. Chapter 7 covers replay in more depth.
+```
+
+##### Indexes, Partitioning, and Clustering
+
+In most RDBMSs, indexes are used for primary table keys (allowing unique identification of rows) and foreign keys (allowing joins with other tables). Indexes can also be applied to other columns to serve the needs of specific applications.
+
+###### From Rows  to Columns
+```
+Columnar serialization allows a database to scan only the columns required for a particular query, sometimes dramatically reducing the amount of data read from the disk. In addition, arranging data by column packs similar values next to each other, yielding high-compression ratios with minimal compression overhead. This allows data to be scanned more quickly from disk and over a network.
+Columnar databases perform poorly for transactional use cases—i.e., when we try to look up large numbers of individual rows asynchronously.
+```
+
+
+The author mentions that #denormalization improves performance on column oriented RDBMSs.
+
+<mark class='red'>Hopefully he talks more about this in Chapter 8, else</mark> #referback 
+
+###### Partitions and Clustering
+
+On top of indexes, it is also useful to further improve speed by *partitioning* our data. Partitioning occurs on a field, often a timestamp.
+
+Inside of *partitions* there  are further techniques to improve speed, one it *clustering*.
+
+Clusters allow finer-grained organization of data within partitions. A clustering scheme applied within a columnar database sorts data by one or a few fields, colocat‐ ing similar values. This improves performance for filtering, sorting, and joining these values.
+
+
+The author talks about how Snowflake has an algorithm that actively analyzes data to  see  which  rows can be clustered together on one or more columns. Snowflake stores in a metadatabase information about each partition, including the number of rows and the range in values for the column(s) it has partitioned on. At each query stage, Snowflake analyzes micro-partitions to determine which ones need to be scanned
+
+
+#### Data Engineering Storage Abstractions
+
+
+>[!Abstract] The storage abstraction you require as a data engineer boils down to a few key considerations:
+>1. Purpose and use case: You must first identify the purpose of storing the data. What is it used for?
+>2. Update patterns: Is the abstraction optimized for bulk updates, streaming inserts, or upserts?
+>3. Cost: What are the direct and indirect financial costs? The time to value? The opportu‐ nity costs?
+>4. Separate storage and compute. #decoupling 
+
+##### The Data Warehouse
+
+Ex: Redshift, BigQuery
+
+**In practice, cloud data warehouses are often used to organize data into a data lake, a storage area for massive amounts of unprocessed raw data. Cloud data warehouses can handle massive amounts of raw text and complex JSON documents.**
+#architecture 
+
+The limitation is that cloud data warehouses cannot handle truly unstructured data, such as images, video, or audio, unlike a true data lake. 
+
+
+##### The Data Lake
+
+Pure data lakes are rarely used anymore as the MPP RDBMSs offered very useful things: schema management; update, merge and delete capabilities. This is what led to the Data Lakehouse
+
+##### The Data LakeHouse
+
+Ex: Databricks DeltaLake or [this in AWS](https://aws.amazon.com/blogs/big-data/build-a-lake-house-architecture-on-aws/)
+
+```
+The data lakehouse is an architecture that combines aspects of the data warehouse and the data lake. As it is generally conceived, the lakehouse stores data in object storage just like a lake. However, the lakehouse adds to this arrangement features designed to streamline data management and create an engineering experience simi‐ lar to a data warehouse. This means robust table and schema support and features for managing incremental updates and deletes. Lakehouses typically also support table history and rollback; this is accomplished by retaining old versions of files and metadata.
+
+A lakehouse system is a metadata and file-management layer deployed with data management and transformation tools.
+```
+
+
+The architecture of the data lakehouse is similar to the architecture used by various commercial *Data Platforms*, including BigQuery and Snowflake. These systems store data in object storage and provide automated metadata management, table history, and update/delete capabilities. The complexities of managing underlying files and storage are fully hidden from the user.
+
+The key advantage of the data lakehouse over proprietary tools is interoperability. It’s much easier to exchange data between tools when stored in an open file format. Reserializing data from a proprietary database format incurs overhead in processing, time, and cost. In a data lakehouse architecture, various tools can connect to the metadata layer and read data directly from object storage.
+#decoupling 
+
+
+##### Data Platforms
+
+Ex: BigQuery (??) , Snowflake
+
+```
+Increasingly, vendors are styling their products as data platforms. These vendors have created their ecosystems of interoperable tools with tight integration into the core data storage layer. In evaluating platforms, engineers must ensure that the tools offered meet their needs. Tools not directly provided in the platform can still interoperate, with extra data overhead for data interchange. Platforms also emphasize close integration with object storage for unstructured use cases, as mentioned in our discussion of cloud data warehouses.
+```
+
+
+**At this point, the notion of the data platform frankly has yet to be fully fleshed out. However, the race is on to create a walled garden of data tools, both simplifying the work of data engineering and generating significant vendor lock-in.**
+#decoupling #wheelIsInvented 
+	
+
+
+##### Stream-to-Batch Storage Architecture
+
+Data flowing through a topic in the streaming storage system is written out to multiple consumers.
+
+Example of consumers would be:
+- AWS Kinesis firehouse which can generate S3 objects based on configurable triggers (e.g., time and batch size)
+- BigQuery can ingest streaming data into a streaming buffer. This streaming buffer is automatically reserialized into columnar object storage. 
+	 **Note:** The query engine supports seamless querying of both the streaming buffer and the object data to provide users a current, nearly real-time view of the table.
+
+
+####  Big Ideas and Trends in Storage
+
+
+##### Data Catalog
+A data catalog is a centralized metadata store for all data across an organization. Data catalogs have both organizational and technical use cases.
+
+Data catalogs make metadata easily available to systems. For instance, a data catalog is a key ingredient of the data lakehouse, allowing table discoverability for queries.
+
+Organizationally, data catalogs allow business users, analysts, data scientists, and engineers to search for data to answer questions.
+
+##### Schema
+
+Two major schema patterns exist: *schema on write* and *schema on read.*
+
+*Schema on write* is essentially the traditional data warehouse pattern: a table has an integrated schema; any writes to the table must conform. **To support schema on write, a data lake must integrate a schema metastore.**
+
+*Schema on read*  means we write whatever and determine it when we re-access the data on a *read*. 
+**Ideally, schema on read is implemented using file formats that implement built-in schema information, such as Parquet or JSON. CSV files are notorious for schema inconsistency and are not recommended in this setting.**
+
+##### Separation of Compute from Storage
+
+This section was very complicated and long.
+
+#decoupling <mark class='red'> referback when we have more time</mark>
+
+
+##### Data Storage Lifecycle and Data Retention
+
+
+Hot/Warm/Cold data.
+
+
+
+#### Conclusion
+
+Storage is everywhere and underlays many stages of the data engineering lifecycle. In this chapter, you learned about the raw ingredients, types, abstractions, and big ideas around storage systems. Gain deep knowledge of the inner workings and limitations of the storage systems you’ll use. Know the types of data, activities, and workloads appropriate for your storage.
+
+
+
+### Chapter 7 - Ingestion
+
+#### Overview
+
+*Data ingestion* is the process of moving data from one place to another. 
+
+
+>[!Abstract] Key questions to ask:
+>-   What’s the use case for the data I’m ingesting?
+>-   Can I reuse this data and avoid ingesting multiple versions of the same dataset?
+>-   Where is the data going? What’s the destination?
+>-   How often should the data be updated from the source?
+>-   What is the expected data volume?
+>- What format is the data in? Can downstream storage and transformation accept this format?
+>- Is the source data in good shape for immediate downstream use? That is, is the data of good quality? What post-processing is required to serve it? What are data-quality risks (e.g., could bot traffic to a website contaminate the data)?
+>- Does the data require in-flight processing for downstream ingestion if the data is from a streaming source?
+
+
+#### Core Concepts
+
+>[!ABSTRACT] Core concepts that influence architectural decisions:
+>-   Bounded versus unbounded
+>-   Frequency
+>-   Synchronous versus asynchronous 
+>-   Serialization and deserialization   
+>-   Throughput and scalability
+>-   Reliability and durability
+>-   Payload
+>-   Push versus pull versus poll patterns
+>-   Frequency
+>-   Synchronous versus asynchronous
+>-   Serialization and deserialization
+>-   Throughput and scalability
+>-   Reliability and durability
+>-   Payload
+>-   Push versus pull versus poll patterns
+
+
+##### Bounded Versus Unbounded Data
+
+'I don't believe in continuous distributions, they're simply convenient approximations to discrete ones' - Dan Weiner
+
+
+The author wishes to make a distinction here. Earlier he talked about how all data starts off as streaming data. Here he talks about how all data is unbounded until it is bounded. He illustrates this by talking about how time is free flowing however we might timestamp it thus creating groups and bounderies. 
+
+Anyway, assuming he is correct he makes a remark:
+**Streaming ingestion systems are simply a tool for preserving the unbounded nature of data so that subsequent steps in the lifecycle can also process it continuously.**
+
+##### Frequency
+
+Examples in descending order of frequency:
+1. *real-time/streaming* - system might continuously ingest events from IoT sensors and process these within seconds.
+2. *Micro-batch* - a CDC system could retrieve new log updates from a source database once a minute.
+3. *Batch*  - a business might ship its tax data to an accounting firm once a year.
+
+
+Important to note: once data reaches a batch process, the batch frequency becomes a bottleneck for all downstream processing.
+
+
+Author also adds:
+
+```
+Streaming systems are the best fit for many data source types. In IoT applications, the typical pattern is for each sensor to write events or measurements to streaming systems as they happen. While this data can be written directly into a database, a streaming ingestion platform such as Amazon Kinesis or Apache Kafka is a better fit for the application. Software applications can adopt similar patterns by writing events to a message queue as they happen rather than waiting for an extraction process to pull events and state information from a backend database. This pattern works exceptionally well for event-driven architectures already exchanging messages through queues. And again, streaming architectures generally coexist with batch processing.
+```
+
+##### Synchronous Versus Asynchronous Ingestion
+
+I'm not sure what he was trying to say about synchronous ingestion, he made it seem like it was a bad idea which obviously i dont think it is. idk
+
+On async ingestion:
+
+```
+With asynchronous ingestion, dependencies can now operate at the level of individ‐ ual events, much as they would in a software backend built from microservices (Figure 7-6). Individual events become available in storage as soon as they are inges‐ ted individually. Take the example of a web application on AWS that emits events into Amazon Kinesis Data Streams (here acting as a buffer). The stream is read by Apache Beam, which parses and enriches events, and then forwards them to a second Kinesis stream; Kinesis Data Firehose rolls up events and writes objects to Amazon S3.
+```
+
+![[Screen Shot 2022-10-24 at 5.49.34 PM.png]]
+
+```
+The big idea is that rather than relying on asynchronous processing, where a batch process runs for each stage as the input batch closes and certain time conditions are met.
+
+Each stage of the asynchronous pipeline can process data items as they become available in parallel across the Beam cluster. The processing rate depends on available resources. 
+
+The Kinesis Data Stream acts as the shock absorber, moderating the load so that event rate spikes will not overwhelm downstream processing. 
+
+Events will move through the pipeline quickly when the event rate is low, and any backlog has cleared. 
+
+
+Note that we could modify the scenario and use a Kinesis Data Stream for storage, eventually extracting events to S3 before they expire out of the stream.
+```
+
+
+
+##### Serialization and Deserialization
+
+Moving data from source to destination involves serialization and deserialization. As a reminder, serialization means encoding the data from a source and preparing data structures for transmission and intermediate storage stages.
+
+When ingesting data, ensure that your destination can deserialize the data it receives. We’ve seen data ingested from a source but then sitting inert and unusable in the destination because the data cannot be properly deserialized. See the more extensive discussion of serialization in Appendix A.
+
+
+##### Throughput and Scalability
+
+
+
+
+
+>[!ram]
+>aws athena + s3 = decoupled -- redshift = coupled -- where can we fit this info?
+#decoupling #architecture 
+
+
 > [!RAM]
 > 1. Read a section first, then read it againt while taking notes
+
 
